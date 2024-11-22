@@ -11,34 +11,36 @@ class analyse(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(analyse, self).__init__()
         self.setupUi(self)
-        self.bouton_confirm.clicked.connect(self.confirmation) #Connection du bouton de validation à la fonction confirmation
 
+        self.bouton_confirm.clicked.connect(self.confirmation_ticker) 
 
-    def confirmation(self):
-        data = fun.import_données(self.ticker.text(), self.depart.text(), self.fin.text()) #Obtention des données basées sur l'input de l'utilisateur
+    def confirmation_ticker(self):
+        infos = fun.obtenir_infos(self.ticker.text(), self.depart.text(), self.fin.text()) 
 
-        self.linegraph(data = data) #Ajout données au graphique
+        self.linegraph_one_ticker(data = infos["data"]) 
 
-        rendement = fun.obtenir_rendement(donnees = data) #Obtention du rendement
-        volatilite = fun.obtenir_volatilite(donnees = data)
-        self.rendement.setText(str(rendement)+"%")
-        self.vol.setText(str(volatilite)+"%")
+        self.rendement.setText(str(infos["rendement"])+"%")
+        self.vol.setText(str(infos["volatilite"])+"%")
 
-    def linegraph(self, data):
+    def linegraph_one_ticker(self, data):
         chart = QtCharts.QChart()
+        chart.setTitle(f"Evolution du cours de {self.ticker.text()} entre le {self.depart.text()} et le {self.fin.text()}")
         series_data = QtCharts.QLineSeries()
         series_data.setName("Close Value")
 
         for i in range(len(data)):
-            series_data.append(i, data["Close"][i])
+            series_data.append(i, data["Close"].iloc[i])
         chart.addSeries(series_data)
 
-        axis_x = QtCharts.QBarCategoryAxis()
-        axis_x.append(data["Date"])
+        axis_x = QtCharts.QValueAxis()
+        axis_x.setRange(1, len(data))
+        axis_x.setTitleText("Date (in days from start date)")
+        axis_x.setTickCount(10)
         chart.addAxis(axis_x, Qt.AlignBottom)
 
-        axis_y = QtCharts.QValueAxis()
+        axis_y = QtCharts.QValueAxis() 
         axis_y.setRange(min(data["Close"]) - 10, max(data["Close"]) + 10)
+        axis_y.setTitleText("Close Value")
         chart.addAxis(axis_y, Qt.AlignLeft)
 
         series_data.attachAxis(axis_x)
