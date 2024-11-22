@@ -6,21 +6,23 @@ import os
 import subprocess
 
 def remake_file(): 
-    ui_file = "yahoo.ui"
+    ui_file = "test.ui"
     py_file = "yahoo.py"
     subprocess.run(['pyside6-uic', ui_file, '-o', py_file], check=True)
 
-def import_données(ticker, dep, ar):
+def obtenir_infos(ticker, dep, ar):
     dep = datetime.strptime(dep, '%Y/%m/%d').strftime('%Y-%m-%d')
     ar = datetime.strptime(ar, '%Y/%m/%d').strftime('%Y-%m-%d')
     donnees = yf.Ticker(ticker).history(start = dep, end = ar, interval = "1d")
-    return pd.DataFrame({"Date": donnees.index,"Close": donnees["Close"].squeeze()}).reset_index(drop = True)
+    donnees = pd.DataFrame({"Date": donnees.index,"Close": donnees["Close"].squeeze()}).reset_index(drop = True)
 
-def obtenir_rendement(donnees):
-    deb = donnees["Close"][0]
-    fin = donnees["Close"][len(donnees["Close"])-1]
-    rendement = (fin - deb)/deb
-    return round(rendement*100, 2)
+    deb = donnees["Close"].iloc[0]
+    fin = donnees["Close"].iloc[-1]
+    rendement = round(((fin - deb)/deb)*100, 2)
 
-def obtenir_volatilite(donnees):
-    return round(np.std(donnees["Close"]), 2)
+    moyenne = np.mean(donnees["Close"])
+    ecart_type = np.var(donnees["Close"])**0.5
+    volatilite = np.round((ecart_type / moyenne) * 100, 2)
+
+    return {"data" : donnees, "rendement" : rendement, "volatilite" : volatilite}
+
