@@ -10,6 +10,10 @@ def remake_file():
     py_file = "yahoo.py"
     subprocess.run(['pyside6-uic', ui_file, '-o', py_file], check=True)
 
+def log_data(data):
+    return np.log(data)
+    
+
 def obtenir_infos(ticker, dep, ar):
     dep = datetime.strptime(dep, '%Y/%m/%d').strftime('%Y-%m-%d')
     ar = datetime.strptime(ar, '%Y/%m/%d').strftime('%Y-%m-%d')
