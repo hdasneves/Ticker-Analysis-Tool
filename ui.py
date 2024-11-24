@@ -3,10 +3,11 @@ from PySide6 import QtCharts
 from PySide6.QtCore import Qt
 import fun
 import sys
-from yahoo import Ui_MainWindow
 import numpy as np
 
 fun.remake_file()
+
+from yahoo import Ui_MainWindow
 
 class analyse(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -57,9 +58,6 @@ class analyse(QMainWindow, Ui_MainWindow):
         series_data_1.setName(text_1)
 
         if data_2 is not None:
-            data_1["Close"] = fun.log_data(data_1["Close"])
-            data_2["Close"] = fun.log_data(data_2["Close"])
-
             series_data_2 = QtCharts.QLineSeries()
             series_data_2.setName(text_2)
 
@@ -77,20 +75,20 @@ class analyse(QMainWindow, Ui_MainWindow):
         chart.addAxis(axis_x, Qt.AlignBottom)
 
         axis_y = QtCharts.QValueAxis() 
-        valeurs = list(data_1["Close"])
-        if data_2 is not None:
-            valeurs += list(data_2["Close"])
-        marge = (max(valeurs) - min(valeurs)) * 0.05
-        axis_y.setRange(min(valeurs) - marge, max(valeurs) + marge)
-        axis_y.setTitleText("Close Value (base log)" if data_2 is not None else "Close Value")
+        axis_y.setRange(min(data_1["Close"]), max(data_1["Close"]))
+        axis_y.setTitleText(f"Close Value {self.actif_a.text()}")
         chart.addAxis(axis_y, Qt.AlignLeft)
 
         series_data_1.attachAxis(axis_x)
         series_data_1.attachAxis(axis_y)
 
         if data_2 is not None: 
+            axis_z = QtCharts.QValueAxis()
+            axis_z.setRange(min(data_2["Close"]), max(data_2["Close"]))
+            axis_z.setTitleText(f"Close Value {self.actif_b.text()}")
+            chart.addAxis(axis_z, Qt.AlignRight)
             series_data_2.attachAxis(axis_x)
-            series_data_2.attachAxis(axis_y)
+            series_data_2.attachAxis(axis_z)
 
         self.graph.setChart(chart)
 
