@@ -531,7 +531,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.onglets.setCurrentIndex(1)
+        self.onglets.setCurrentIndex(0)
         self.retours.setCurrentIndex(1)
 
 
