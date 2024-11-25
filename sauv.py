@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox, QHeaderView, QInputDialog
+from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox, QHeaderView, QInputDialog, QFileDialog
 from PySide6 import QtCharts
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from PySide6.QtCore import Qt
@@ -19,6 +19,7 @@ class afficheur(QMainWindow, Ui_MainWindow):
         self.afficher_données(dataframe = overall_data)
         self.ajout_colonne.clicked.connect(self.nouvelle_colonne)
         self.suppr.clicked.connect(self.supprimer_colonne)
+        self.sauv.clicked.connect(self.exporter_en_csv )
 
     def afficher_données(self, dataframe):
         self.model = QStandardItemModel(dataframe.shape[0], dataframe.shape[1], self)
@@ -45,3 +46,21 @@ class afficheur(QMainWindow, Ui_MainWindow):
         
         if ok :
             self.model.removeColumn(noms_colonnes.index(nom_colonne))
+    
+    def exporter_en_csv(self):
+        options = QFileDialog.Options()
+        chemin_fichier, _ = QFileDialog.getSaveFileName(self, "Exporter les données", "", "Fichiers CSV (*.csv);;Fichiers Excel (*.xlsx);;Tous les fichiers (*)", options = options)
+        
+        if not chemin_fichier:
+            return
+        
+        model = self.classeur.model()
+        data = [[model.data(model.index(row, col)) for col in range(model.columnCount())] for row in range(model.rowCount())]
+        headers = [model.headerData(col, Qt.Horizontal, Qt.DisplayRole) for col in range(model.columnCount())]
+        df = pd.DataFrame(data, columns=headers)
+
+        if chemin_fichier.endswith(".xlsx"):
+            df = df.to_excel(chemin_fichier, index = False)
+        if chemin_fichier.endswith(".csv"):
+            df = df.to_csv(chemin_fichier, index = False)
+
