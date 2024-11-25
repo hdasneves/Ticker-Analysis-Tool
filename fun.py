@@ -6,14 +6,18 @@ import os
 import subprocess
 
 def remake_file(): 
-    ui_file = "test.ui"
-    py_file = "yahoo.py"
-    subprocess.run(['pyside6-uic', ui_file, '-o', py_file], check=True)
+    subprocess.run(['pyside6-uic', "yahoo.ui", '-o', "yahoo.py"], check=True)
+    subprocess.run(['pyside6-uic', "table.ui", '-o', "table.py"], check=True)
 
 def obtenir_infos(ticker, dep, ar):
     dep = datetime.strptime(dep, '%Y/%m/%d').strftime('%Y-%m-%d')
     ar = datetime.strptime(ar, '%Y/%m/%d').strftime('%Y-%m-%d')
     donnees = yf.Ticker(ticker).history(start = dep, end = ar, interval = "1d")
+
+    if donnees.empty :
+        return None
+
+    donnees.index = donnees.index.tz_convert(None).normalize()
     donnees = pd.DataFrame({"Date": donnees.index,"Close": donnees["Close"].squeeze()}).reset_index(drop = True)
 
     deb = donnees["Close"].iloc[0]
