@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'test.ui'
+## Form generated from reading UI file 'yahoo.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.5.2
 ##
@@ -157,6 +157,11 @@ class Ui_MainWindow(object):
         self.widget_8.setSizePolicy(sizePolicy1)
         self.verticalLayout_5 = QVBoxLayout(self.widget_8)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.afficher_1 = QPushButton(self.widget_8)
+        self.afficher_1.setObjectName(u"afficher_1")
+
+        self.verticalLayout_5.addWidget(self.afficher_1)
+
         self.bouton_confirm = QPushButton(self.widget_8)
         self.bouton_confirm.setObjectName(u"bouton_confirm")
 
@@ -265,15 +270,15 @@ class Ui_MainWindow(object):
         self.widget_15.setSizePolicy(sizePolicy1)
         self.verticalLayout_8 = QVBoxLayout(self.widget_15)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.pushButton = QPushButton(self.widget_15)
-        self.pushButton.setObjectName(u"pushButton")
+        self.afficher_2 = QPushButton(self.widget_15)
+        self.afficher_2.setObjectName(u"afficher_2")
 
-        self.verticalLayout_8.addWidget(self.pushButton)
+        self.verticalLayout_8.addWidget(self.afficher_2)
 
         self.bouton_confirm_comparaison = QPushButton(self.widget_15)
         self.bouton_confirm_comparaison.setObjectName(u"bouton_confirm_comparaison")
 
-        self.verticalLayout_8.addWidget(self.bouton_confirm_comparaison)
+        self.verticalLayout_8.addWidget(self.bouton_confirm_comparaison, 0, Qt.AlignBottom)
 
 
         self.horizontalLayout_14.addWidget(self.widget_15)
@@ -546,6 +551,7 @@ class Ui_MainWindow(object):
         self.label_date.setText(QCoreApplication.translate("MainWindow", u"Choix de la p\u00e9riode", None))
         self.depart.setDisplayFormat(QCoreApplication.translate("MainWindow", u"yyyy/MM/dd", None))
         self.fin.setDisplayFormat(QCoreApplication.translate("MainWindow", u"yyyy/MM/dd", None))
+        self.afficher_1.setText(QCoreApplication.translate("MainWindow", u"Afficher CSV", None))
         self.bouton_confirm.setText(QCoreApplication.translate("MainWindow", u"Confirmer", None))
         self.onglets.setTabText(self.onglets.indexOf(self.choix_period), QCoreApplication.translate("MainWindow", u"Analyse d'un ticker donn\u00e9", None))
         self.label_ticker_comparaison.setText(QCoreApplication.translate("MainWindow", u"Choix de l'actif A et B", None))
@@ -554,7 +560,7 @@ class Ui_MainWindow(object):
         self.label_date_comparaison.setText(QCoreApplication.translate("MainWindow", u"Choix de la p\u00e9riode", None))
         self.depart_comparaison.setDisplayFormat(QCoreApplication.translate("MainWindow", u"yyyy/MM/dd", None))
         self.fin_comparaison.setDisplayFormat(QCoreApplication.translate("MainWindow", u"yyyy/MM/dd", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Export to CSV", None))
+        self.afficher_2.setText(QCoreApplication.translate("MainWindow", u"Afficher CSV", None))
         self.bouton_confirm_comparaison.setText(QCoreApplication.translate("MainWindow", u"Confirmer", None))
         self.onglets.setTabText(self.onglets.indexOf(self.comparaison), QCoreApplication.translate("MainWindow", u"Comparaison entre deux tickers", None))
         self.label_r_a.setText("")
