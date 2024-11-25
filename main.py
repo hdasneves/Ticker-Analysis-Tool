@@ -5,8 +5,6 @@ import fun
 import sys
 import numpy as np
 
-fun.remake_file()
-
 from yahoo import Ui_MainWindow
 from sauv import afficheur
 
