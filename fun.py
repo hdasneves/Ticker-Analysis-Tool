@@ -5,6 +5,10 @@ from datetime import datetime
 import os
 import subprocess
 
+def remake_file(): 
+    subprocess.run(['pyside6-uic', "yahoo.ui", '-o', "yahoo.py"], check=True)
+    subprocess.run(['pyside6-uic', "table.ui", '-o', "table.py"], check=True)
+
 def obtenir_infos(ticker, dep, ar):
     dep = datetime.strptime(dep, '%Y/%m/%d').strftime('%Y-%m-%d')
     ar = datetime.strptime(ar, '%Y/%m/%d').strftime('%Y-%m-%d')
@@ -13,7 +17,7 @@ def obtenir_infos(ticker, dep, ar):
     if donnees.empty :
         return None
 
-    donnees.index = donnees.index.tz_convert(None).normalize()
+    donnees.index = donnees.index.tz_localize(None).normalize().strftime("%Y-%m-%d")
     donnees = pd.DataFrame({"Date": donnees.index,"Close": donnees["Close"].squeeze()}).reset_index(drop = True)
 
     deb = donnees["Close"].iloc[0]
@@ -25,4 +29,5 @@ def obtenir_infos(ticker, dep, ar):
     volatilite = np.round((ecart_type / moyenne) * 100, 2)
 
     return {"data" : donnees, "rendement" : rendement, "volatilite" : volatilite}
+
 
