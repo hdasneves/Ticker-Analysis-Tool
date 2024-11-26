@@ -5,10 +5,6 @@ from datetime import datetime
 import os
 import subprocess
 
-def remake_file(): 
-    subprocess.run(['pyside6-uic', "yahoo.ui", '-o', "yahoo.py"], check=True)
-    subprocess.run(['pyside6-uic', "table.ui", '-o', "table.py"], check=True)
-
 def obtenir_infos(ticker, dep, ar):
     dep = datetime.strptime(dep, '%Y/%m/%d').strftime('%Y-%m-%d')
     ar = datetime.strptime(ar, '%Y/%m/%d').strftime('%Y-%m-%d')
