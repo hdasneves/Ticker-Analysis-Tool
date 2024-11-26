@@ -1,9 +1,11 @@
 from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PySide6 import QtCharts
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QDateTime
 import fun
 import sys
 import numpy as np
+
+fun.remake_file()
 
 from yahoo import Ui_MainWindow
 from sauv import afficheur
@@ -16,27 +18,25 @@ class analyse(QMainWindow, Ui_MainWindow):
         self.bouton_confirm_comparaison.clicked.connect(self.confirmation_comparaison) 
         self.afficher_1.clicked.connect(self.afficher_one_ticker)
         self.afficher_2.clicked.connect(self.afficher_classeur)
+
+        self.save_ticker = {}
+        self.save_tickers = {}
     
     def afficher_one_ticker(self):
-        data_1 = fun.obtenir_infos(self.ticker.text(), self.depart.text(), self.fin.text()) 
-
-        if data_1 is None:
-            QMessageBox.critical(self, "Erreur", "Ticker inexistant ou dates incorrectes !")
+        if len(self.save_ticker) == 0:
+            QMessageBox.critical(self, "Erreur", "Cliquez sur confirmer avant d'afficher le CSV !")
             return
-        
-        self.window_classeur = afficheur(text_1 = self.actif_a.text(), data_1 = data_1)
+
+        self.window_classeur = afficheur(text_1 = self.actif_a.text(), data_1 = self.save_ticker["data_1"])
         self.window_classeur.show()
 
 
     def afficher_classeur(self):
-        data_1 = fun.obtenir_infos(self.actif_a.text(), self.depart_comparaison.text(), self.fin_comparaison.text()) 
-        data_2 = fun.obtenir_infos(self.actif_b.text(), self.depart_comparaison.text(), self.fin_comparaison.text()) 
-
-        if data_1 is None or data_2 is None: 
-            QMessageBox.critical(self, "Erreur", "Ticker inexistant ou dates incorrectes !")
+        if len(self.save_tickers) == 0:
+            QMessageBox.critical(self, "Erreur", "Cliquez sur confirmer avant d'afficher le CSV !")
             return
         
-        self.window_classeur = afficheur(text_1 = self.actif_a.text(), data_1 = data_1, text_2 = self.actif_b.text(), data_2 = data_2)
+        self.window_classeur = afficheur(text_1 = self.actif_a.text(), data_1 = self.save_tickers["data_1"], text_2 = self.actif_b.text(), data_2 = self.save_tickers["data_2"])
         self.window_classeur.show()
 
     def confirmation_ticker(self):
@@ -45,6 +45,8 @@ class analyse(QMainWindow, Ui_MainWindow):
         if infos is None : 
             QMessageBox.critical(self, "Erreur", "Ticker inexistant ou dates incorrectes !")
             return
+        
+        self.save_ticker = {"data_1" : infos}
         
         self.linegraph(self.ticker.text(), data_1 = infos["data"])
         self.retours.setCurrentIndex(1)
@@ -56,11 +58,14 @@ class analyse(QMainWindow, Ui_MainWindow):
     def confirmation_comparaison(self):
         actif_a = fun.obtenir_infos(self.actif_a.text(), self.depart_comparaison.text(), self.fin_comparaison.text()) 
         actif_b = fun.obtenir_infos(self.actif_b.text(), self.depart_comparaison.text(), self.fin_comparaison.text()) 
+
         
         if actif_a is None or actif_b is None: 
             QMessageBox.critical(self, "Erreur", "Ticker inexistant ou dates incorrectes !")
             return
         
+        self.save_tickers = {"data_1" : actif_a, "data_2" : actif_b}
+
         self.linegraph(self.actif_a.text(), actif_a["data"], self.actif_b.text(), actif_b["data"])
 
         self.label_r_a.setText(f"Rendement de {self.actif_a.text()}")
@@ -95,15 +100,28 @@ class analyse(QMainWindow, Ui_MainWindow):
             series_data_2.setName(text_2)
 
             for i in range(len(data_2)):
-                series_data_2.append(i, data_2["Close"].iloc[i])
+                dates_2 = QDateTime.fromString(str(data_2["Date"].iloc[i]), "yyyy-MM-dd")
+                series_data_2.append(float(dates_2.toMSecsSinceEpoch()), data_2["Close"].iloc[i])
             chart.addSeries(series_data_2)
 
         for i in range(len(data_1)):
-            series_data_1.append(i, data_1["Close"].iloc[i])
+            dates_1 = QDateTime.fromString(str(data_1["Date"].iloc[i]), "yyyy-MM-dd")
+            series_data_1.append(float(dates_1.toMSecsSinceEpoch()), data_1["Close"].iloc[i])
         chart.addSeries(series_data_1)
 
-        axis_x = QtCharts.QValueAxis()
-        axis_x.setRange(0, len(data_1) - 1)
+        axis_x = QtCharts.QDateTimeAxis()
+        if data_2 is not None:
+            start_date_1 = QDateTime.fromString(str(data_1["Date"].iloc[0]), "yyyy-MM-dd").toMSecsSinceEpoch()
+            start_date_2 = QDateTime.fromString(str(data_2["Date"].iloc[0]), "yyyy-MM-dd").toMSecsSinceEpoch()
+            start_date = min(start_date_1, start_date_2)
+            end_date_1 = QDateTime.fromString(str(data_1["Date"].iloc[-1]), "yyyy-MM-dd").toMSecsSinceEpoch()
+            end_date_2 = QDateTime.fromString(str(data_2["Date"].iloc[-1]), "yyyy-MM-dd").toMSecsSinceEpoch()
+            end_date = max(end_date_1, end_date_2)
+        else:
+            start_date = QDateTime.fromString(str(data_1["Date"].iloc[0]), "yyyy-MM-dd").toMSecsSinceEpoch()
+            end_date = QDateTime.fromString(str(data_1["Date"].iloc[-1]), "yyyy-MM-dd").toMSecsSinceEpoch()
+        axis_x.setRange(QDateTime.fromMSecsSinceEpoch(start_date), QDateTime.fromMSecsSinceEpoch(end_date))
+        axis_x.setFormat("yyyy-MM-dd")
         axis_x.setTitleText("Date (in days from start date)")
         chart.addAxis(axis_x, Qt.AlignBottom)
 
