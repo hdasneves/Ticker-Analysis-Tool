@@ -2,8 +2,6 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 from datetime import datetime
-import os
-import subprocess
 
 def obtenir_infos(ticker, dep, ar):
     dep = datetime.strptime(dep, '%Y/%m/%d').strftime('%Y-%m-%d')
@@ -22,8 +20,11 @@ def obtenir_infos(ticker, dep, ar):
 
     moyenne = np.mean(donnees["Close"])
     ecart_type = np.var(donnees["Close"])**0.5
-    volatilite = np.round((ecart_type / moyenne) * 100, 2)
+    volatilite = round(ecart_type, 2)
 
-    return {"data" : donnees, "rendement" : rendement, "volatilite" : volatilite}
+    per = yf.Ticker(ticker).info.get("trailingPE")
+    beta = yf.Ticker(ticker).info.get("beta")
+
+    return {"data" : donnees, "rendement" : rendement, "volatilite" : volatilite, "per" : per, "beta" : beta}
 
 
