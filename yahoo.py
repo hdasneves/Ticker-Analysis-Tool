@@ -511,11 +511,35 @@ class Ui_MainWindow(object):
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
         self.widget_12 = QWidget(self.widget_5)
         self.widget_12.setObjectName(u"widget_12")
+        self.horizontalLayout_26 = QHBoxLayout(self.widget_12)
+        self.horizontalLayout_26.setObjectName(u"horizontalLayout_26")
+        self.label_per = QLabel(self.widget_12)
+        self.label_per.setObjectName(u"label_per")
+
+        self.horizontalLayout_26.addWidget(self.label_per)
+
+        self.per = QLabel(self.widget_12)
+        self.per.setObjectName(u"per")
+
+        self.horizontalLayout_26.addWidget(self.per)
+
 
         self.verticalLayout_9.addWidget(self.widget_12)
 
         self.widget_11 = QWidget(self.widget_5)
         self.widget_11.setObjectName(u"widget_11")
+        self.horizontalLayout_25 = QHBoxLayout(self.widget_11)
+        self.horizontalLayout_25.setObjectName(u"horizontalLayout_25")
+        self.label_beta = QLabel(self.widget_11)
+        self.label_beta.setObjectName(u"label_beta")
+
+        self.horizontalLayout_25.addWidget(self.label_beta)
+
+        self.beta = QLabel(self.widget_11)
+        self.beta.setObjectName(u"beta")
+
+        self.horizontalLayout_25.addWidget(self.beta)
+
 
         self.verticalLayout_9.addWidget(self.widget_11)
 
@@ -545,7 +569,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label_en_tete.setText(QCoreApplication.translate("MainWindow", u"Outil d'analyse d'un ticker donn\u00e9 sur une p\u00e9riode souhait\u00e9e ", None))
+        self.label_en_tete.setText(QCoreApplication.translate("MainWindow", u"Outil d'analyse de tickers sur une p\u00e9riode souhait\u00e9e ", None))
         self.label_ticker.setText(QCoreApplication.translate("MainWindow", u"Choix du ticker", None))
         self.ticker.setText(QCoreApplication.translate("MainWindow", u"AMZN", None))
         self.label_date.setText(QCoreApplication.translate("MainWindow", u"Choix de la p\u00e9riode", None))
@@ -579,5 +603,9 @@ class Ui_MainWindow(object):
         self.rendement.setText("")
         self.label_vol.setText("")
         self.vol.setText("")
+        self.label_per.setText("")
+        self.per.setText("")
+        self.label_beta.setText("")
+        self.beta.setText("")
     # retranslateUi
 
