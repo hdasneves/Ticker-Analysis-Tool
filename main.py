@@ -3,7 +3,6 @@ from PySide6 import QtCharts
 from PySide6.QtCore import Qt, QDateTime
 import fun
 import sys
-import numpy as np
 from yahoo import Ui_MainWindow
 from sauv import afficheur
 
@@ -11,6 +10,8 @@ class analyse(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(analyse, self).__init__()
         self.setupUi(self)
+        self.setWindowTitle("Interface principale")
+
         self.bouton_confirm.clicked.connect(self.confirmation_ticker)
         self.bouton_confirm_comparaison.clicked.connect(self.confirmation_comparaison) 
         self.afficher_1.clicked.connect(self.afficher_one_ticker)
@@ -52,6 +53,18 @@ class analyse(QMainWindow, Ui_MainWindow):
         self.label_vol.setText("Volatilité (en %)")
         self.vol.setText(str(infos["volatilite"])+"%")
 
+        self.label_per.setText("PER actuel (hors période choisie)")
+        if infos["per"] is not None : 
+            self.per.setText(str(round(infos["per"], 2)))
+        else : 
+            self.per.setText("Données indisponibles !")
+
+        self.label_beta.setText("Beta actuel (hors période choisie)")
+        if infos["beta"] is not None : 
+            self.beta.setText(str(round(infos["beta"], 2)))
+        else : 
+            self.beta.setText("Données indisponibles !")
+
     def confirmation_comparaison(self):
         actif_a = fun.obtenir_infos(self.actif_a.text(), self.depart_comparaison.text(), self.fin_comparaison.text()) 
         actif_b = fun.obtenir_infos(self.actif_b.text(), self.depart_comparaison.text(), self.fin_comparaison.text()) 
@@ -76,18 +89,18 @@ class analyse(QMainWindow, Ui_MainWindow):
         self.v_b.setText(str(actif_b["volatilite"])+"%")
 
         self.label_diff_r.setText(f"Spread Return")
-        self.r_diff.setText(str(np.round(actif_a["rendement"] - actif_b["rendement"]))+"%")
+        self.r_diff.setText(str(round(actif_a["rendement"] - actif_b["rendement"]))+"%")
         self.label_diff_v.setText(f"Spread Volatility")
-        self.v_diff.setText(str(np.round(actif_a["volatilite"] - actif_b["volatilite"], 2))+"%")
+        self.v_diff.setText(str(round(actif_a["volatilite"] - actif_b["volatilite"], 2))+"%")
 
         self.retours.setCurrentIndex(0)
 
     def linegraph(self, text_1, data_1, text_2 = None, data_2 = None):
         chart = QtCharts.QChart()
         if data_2 is not None:
-            chart.setTitle(f"Comparaison de l'évolution du cours de {self.actif_a.text()} et de {self.actif_b.text()} entre le {self.depart_comparaison.text()} et le {self.fin_comparaison.text()} en base log")
+            chart.setTitle(f"Comparaison de l'évolution du cours de {text_1} et de {text_2} entre le {self.depart_comparaison.text()} et le {self.fin_comparaison.text()} en base log")
         else : 
-            chart.setTitle(f"Evolution du cours de {self.ticker.text()} entre le {self.depart.text()} et le {self.fin.text()}")
+            chart.setTitle(f"Evolution du cours de {text_1} entre le {self.depart.text()} et le {self.fin.text()}")
 
         series_data_1 = QtCharts.QLineSeries()
         series_data_1.setName(text_1)
@@ -125,7 +138,7 @@ class analyse(QMainWindow, Ui_MainWindow):
         axis_y = QtCharts.QValueAxis() 
         marge_y = (max(data_1["Close"])- min(data_1["Close"])) * 0.05
         axis_y.setRange(min(data_1["Close"]) - marge_y, max(data_1["Close"]) + marge_y)
-        axis_y.setTitleText(f"Close Value {self.actif_a.text()}")
+        axis_y.setTitleText(f"Close Value {text_1}")
         chart.addAxis(axis_y, Qt.AlignLeft)
 
         series_data_1.attachAxis(axis_x)
@@ -135,7 +148,7 @@ class analyse(QMainWindow, Ui_MainWindow):
             axis_z = QtCharts.QValueAxis()
             marge_z = (max(data_2["Close"])- min(data_2["Close"])) * 0.05
             axis_z.setRange(min(data_2["Close"]) - marge_z, max(data_2["Close"]) + marge_z)
-            axis_z.setTitleText(f"Close Value {self.actif_b.text()}")
+            axis_z.setTitleText(f"Close Value {text_2}")
             chart.addAxis(axis_z, Qt.AlignRight)
             series_data_2.attachAxis(axis_x)
             series_data_2.attachAxis(axis_z)
