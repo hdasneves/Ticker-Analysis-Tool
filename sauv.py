@@ -5,11 +5,13 @@ from PySide6.QtCore import Qt
 import sys
 from table import Ui_MainWindow
 import pandas as pd
+import subprocess
 
 class afficheur(QMainWindow, Ui_MainWindow):
     def __init__(self, text_1, data_1, text_2 = None, data_2 = None):
         super(afficheur, self).__init__()
         self.setupUi(self)
+        self.setWindowTitle("Editeur de données")
 
         if data_2 is not None :
             overall_data = pd.merge(left = data_1["data"], right = data_2["data"], on = "Date", suffixes = (f"_{text_1}", f"_{text_2}"))
