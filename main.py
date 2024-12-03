@@ -3,6 +3,9 @@ from PySide6 import QtCharts
 from PySide6.QtCore import Qt, QDateTime
 import fun
 import sys
+
+fun.remake_file()
+
 from yahoo import Ui_MainWindow
 from sauv import afficheur
 
@@ -16,9 +19,18 @@ class analyse(QMainWindow, Ui_MainWindow):
         self.bouton_confirm_comparaison.clicked.connect(self.confirmation_comparaison) 
         self.afficher_1.clicked.connect(self.afficher_one_ticker)
         self.afficher_2.clicked.connect(self.afficher_classeur)
+        self.onglets.tabBarClicked.connect(self.tab_haut)
 
         self.save_ticker = {}
         self.save_tickers = {}
+
+    def tab_haut(self, index):
+        if index == 0 :
+           self.choix_graph.setCurrentIndex(0)
+           self.retours.setCurrentIndex(1)
+        else : 
+            self.choix_graph.setCurrentIndex(1)
+            self.retours.setCurrentIndex(0)
     
     def afficher_one_ticker(self):
         if len(self.save_ticker) == 0:
@@ -46,8 +58,7 @@ class analyse(QMainWindow, Ui_MainWindow):
         
         self.save_ticker = {"data_1" : infos}
         
-        self.linegraph(self.ticker.text(), data_1 = infos["data"])
-        self.retours.setCurrentIndex(1)
+        self.linegraph(self.graph_ticker, self.ticker.text(), data_1 = infos["data"])
         self.label_rendement.setText("Rendement")
         self.rendement.setText(str(infos["rendement"])+"%")
         self.label_vol.setText("Volatilité (en %)")
@@ -70,13 +81,17 @@ class analyse(QMainWindow, Ui_MainWindow):
         actif_b = fun.obtenir_infos(self.actif_b.text(), self.depart_comparaison.text(), self.fin_comparaison.text()) 
 
         
-        if actif_a is None or actif_b is None: 
+        if actif_a is None or actif_b is None : 
             QMessageBox.critical(self, "Erreur", "Ticker inexistant ou dates incorrectes !")
             return
         
         self.save_tickers = {"data_1" : actif_a, "data_2" : actif_b}
 
-        self.linegraph(self.actif_a.text(), actif_a["data"], self.actif_b.text(), actif_b["data"])
+        ratio_data = fun.get_ratio(text_1 = self.actif_a.text(), data_1 = actif_a["data"], text_2 = self.actif_b.text(), data_2 = actif_b["data"])
+
+        self.linegraph(self.graph_evo_tickers, self.actif_a.text(), actif_a["data"], self.actif_b.text(), actif_b["data"])
+        self.linegraph(self.graph_ratio_ticker, self.actif_a.text(), ratio_data, ratio = True, text_2 = self.actif_b.text())
+
 
         self.label_r_a.setText(f"Rendement de {self.actif_a.text()}")
         self.r_a.setText(str(actif_a["rendement"])+"%")
@@ -93,17 +108,21 @@ class analyse(QMainWindow, Ui_MainWindow):
         self.label_diff_v.setText(f"Spread Volatility")
         self.v_diff.setText(str(round(actif_a["volatilite"] - actif_b["volatilite"], 2))+"%")
 
-        self.retours.setCurrentIndex(0)
-
-    def linegraph(self, text_1, data_1, text_2 = None, data_2 = None):
+    def linegraph(self, graphique, text_1, data_1, text_2 = None, data_2 = None, ratio = None) :
         chart = QtCharts.QChart()
         if data_2 is not None:
             chart.setTitle(f"Comparaison de l'évolution du cours de {text_1} et de {text_2} entre le {self.depart_comparaison.text()} et le {self.fin_comparaison.text()} en base log")
+        elif ratio is not None :
+            chart.setTitle(f"Ratio entre le cours de {text_1} et de {text_2} entre le {self.depart.text()} et le {self.fin.text()}")
         else : 
             chart.setTitle(f"Evolution du cours de {text_1} entre le {self.depart.text()} et le {self.fin.text()}")
 
         series_data_1 = QtCharts.QLineSeries()
-        series_data_1.setName(text_1)
+
+        if ratio is not None :
+            series_data_1.setName(f"Ratio {text_1}/{text_2}")
+        else : 
+            series_data_1.setName(text_1)
 
         if data_2 is not None:
             series_data_2 = QtCharts.QLineSeries()
@@ -132,13 +151,16 @@ class analyse(QMainWindow, Ui_MainWindow):
             end_date = QDateTime.fromString(str(data_1["Date"].iloc[-1]), "yyyy-MM-dd").toMSecsSinceEpoch()
         axis_x.setRange(QDateTime.fromMSecsSinceEpoch(start_date), QDateTime.fromMSecsSinceEpoch(end_date))
         axis_x.setFormat("yyyy-MM-dd")
-        axis_x.setTitleText("Date (in days from start date)")
+        axis_x.setTitleText("Date")
         chart.addAxis(axis_x, Qt.AlignBottom)
 
         axis_y = QtCharts.QValueAxis() 
         marge_y = (max(data_1["Close"])- min(data_1["Close"])) * 0.05
         axis_y.setRange(min(data_1["Close"]) - marge_y, max(data_1["Close"]) + marge_y)
-        axis_y.setTitleText(f"Close Value {text_1}")
+        if ratio is not None : 
+            axis_y.setTitleText(f"Ratio entre les deux cours")
+        else :
+            axis_y.setTitleText(f"Close Value {text_1}")
         chart.addAxis(axis_y, Qt.AlignLeft)
 
         series_data_1.attachAxis(axis_x)
@@ -153,11 +175,11 @@ class analyse(QMainWindow, Ui_MainWindow):
             series_data_2.attachAxis(axis_x)
             series_data_2.attachAxis(axis_z)
 
-        self.graph.setChart(chart)
-
+        graphique.setChart(chart)
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = analyse()
     window.show()
-    app.exec_()
+    app.exec()
