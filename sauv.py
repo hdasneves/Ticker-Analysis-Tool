@@ -1,11 +1,8 @@
-from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox, QHeaderView, QInputDialog, QFileDialog
-from PySide6 import QtCharts
+from PySide6.QtWidgets import QMainWindow, QHeaderView, QInputDialog, QFileDialog
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from PySide6.QtCore import Qt
-import sys
 from table import Ui_MainWindow
 import pandas as pd
-import subprocess
 
 class afficheur(QMainWindow, Ui_MainWindow):
     def __init__(self, text_1, data_1, text_2 = None, data_2 = None):
