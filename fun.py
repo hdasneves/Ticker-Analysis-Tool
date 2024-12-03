@@ -2,6 +2,14 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 from datetime import datetime
+import subprocess
+
+def remake_file():
+    yah = ["pyside6-uic", "yahoo.ui", "-o", "yahoo.py"]
+    tab = ["pyside6-uic", "table.ui", "-o", "table.py"]
+    subprocess.run(yah, check=True)
+    subprocess.run(tab, check=True)
+
 
 def obtenir_infos(ticker, dep, ar):
     dep = datetime.strptime(dep, '%Y/%m/%d').strftime('%Y-%m-%d')
@@ -26,5 +34,10 @@ def obtenir_infos(ticker, dep, ar):
     beta = yf.Ticker(ticker).info.get("beta")
 
     return {"data" : donnees, "rendement" : rendement, "volatilite" : volatilite, "per" : per, "beta" : beta}
+
+def get_ratio(text_1, data_1, text_2, data_2):
+    ratio_data = pd.merge(left = data_1, right = data_2, on = "Date", suffixes = (f"_{text_1}", f"_{text_2}"))
+    ratio_data["Close"] = ratio_data[f"Close_{text_1}"] / ratio_data[f"Close_{text_2}"] #Utilisation de close au lieu de ratio pour réutiliser la fonction linegraph
+    return ratio_data[["Date", "Close"]]
 
 
