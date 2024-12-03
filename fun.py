@@ -4,13 +4,6 @@ import yfinance as yf
 from datetime import datetime
 import subprocess
 
-def remake_file():
-    yah = ["pyside6-uic", "yahoo.ui", "-o", "yahoo.py"]
-    tab = ["pyside6-uic", "table.ui", "-o", "table.py"]
-    subprocess.run(yah, check=True)
-    subprocess.run(tab, check=True)
-
-
 def obtenir_infos(ticker, dep, ar):
     dep = datetime.strptime(dep, '%Y/%m/%d').strftime('%Y-%m-%d')
     ar = datetime.strptime(ar, '%Y/%m/%d').strftime('%Y-%m-%d')
