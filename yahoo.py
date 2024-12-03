@@ -306,10 +306,50 @@ class Ui_MainWindow(object):
         self.partie_graph.setSizePolicy(sizePolicy4)
         self.horizontalLayout_7 = QHBoxLayout(self.partie_graph)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.graph = QChartView(self.partie_graph)
-        self.graph.setObjectName(u"graph")
+        self.choix_graph = QStackedWidget(self.partie_graph)
+        self.choix_graph.setObjectName(u"choix_graph")
+        self.un_ticker_ = QWidget()
+        self.un_ticker_.setObjectName(u"un_ticker_")
+        self.horizontalLayout_30 = QHBoxLayout(self.un_ticker_)
+        self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
+        self.graph_ticker = QChartView(self.un_ticker_)
+        self.graph_ticker.setObjectName(u"graph_ticker")
 
-        self.horizontalLayout_7.addWidget(self.graph)
+        self.horizontalLayout_30.addWidget(self.graph_ticker)
+
+        self.choix_graph.addWidget(self.un_ticker_)
+        self.deux_tickers_ = QWidget()
+        self.deux_tickers_.setObjectName(u"deux_tickers_")
+        self.horizontalLayout_27 = QHBoxLayout(self.deux_tickers_)
+        self.horizontalLayout_27.setObjectName(u"horizontalLayout_27")
+        self.choix_graph_deux_tickers = QTabWidget(self.deux_tickers_)
+        self.choix_graph_deux_tickers.setObjectName(u"choix_graph_deux_tickers")
+        self.evo = QWidget()
+        self.evo.setObjectName(u"evo")
+        self.horizontalLayout_28 = QHBoxLayout(self.evo)
+        self.horizontalLayout_28.setObjectName(u"horizontalLayout_28")
+        self.graph_evo_tickers = QChartView(self.evo)
+        self.graph_evo_tickers.setObjectName(u"graph_evo_tickers")
+
+        self.horizontalLayout_28.addWidget(self.graph_evo_tickers)
+
+        self.choix_graph_deux_tickers.addTab(self.evo, "")
+        self.ratio = QWidget()
+        self.ratio.setObjectName(u"ratio")
+        self.horizontalLayout_29 = QHBoxLayout(self.ratio)
+        self.horizontalLayout_29.setObjectName(u"horizontalLayout_29")
+        self.graph_ratio_ticker = QChartView(self.ratio)
+        self.graph_ratio_ticker.setObjectName(u"graph_ratio_ticker")
+
+        self.horizontalLayout_29.addWidget(self.graph_ratio_ticker)
+
+        self.choix_graph_deux_tickers.addTab(self.ratio, "")
+
+        self.horizontalLayout_27.addWidget(self.choix_graph_deux_tickers)
+
+        self.choix_graph.addWidget(self.deux_tickers_)
+
+        self.horizontalLayout_7.addWidget(self.choix_graph)
 
 
         self.verticalLayout.addWidget(self.partie_graph)
@@ -561,6 +601,8 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.onglets.setCurrentIndex(0)
+        self.choix_graph.setCurrentIndex(0)
+        self.choix_graph_deux_tickers.setCurrentIndex(0)
         self.retours.setCurrentIndex(1)
 
 
@@ -587,6 +629,8 @@ class Ui_MainWindow(object):
         self.afficher_2.setText(QCoreApplication.translate("MainWindow", u"Afficher CSV", None))
         self.bouton_confirm_comparaison.setText(QCoreApplication.translate("MainWindow", u"Confirmer", None))
         self.onglets.setTabText(self.onglets.indexOf(self.comparaison), QCoreApplication.translate("MainWindow", u"Comparaison entre deux tickers", None))
+        self.choix_graph_deux_tickers.setTabText(self.choix_graph_deux_tickers.indexOf(self.evo), QCoreApplication.translate("MainWindow", u"Evolutions des cours", None))
+        self.choix_graph_deux_tickers.setTabText(self.choix_graph_deux_tickers.indexOf(self.ratio), QCoreApplication.translate("MainWindow", u"Ratio entre les deux cours", None))
         self.label_r_a.setText("")
         self.r_a.setText("")
         self.label_r_b.setText("")
