@@ -4,9 +4,6 @@ from PySide6.QtCore import Qt, QDateTime
 import class_ticker
 import fun
 import sys
-
-fun.remake_file()
-
 from yahoo import Ui_MainWindow
 from sauv import afficheur
 
