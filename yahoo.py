@@ -16,10 +16,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QDateEdit, QFrame, QHBoxLayout,
-    QLabel, QLineEdit, QMainWindow, QPushButton,
-    QSizePolicy, QStackedWidget, QTabWidget, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QDateEdit, QFrame,
+    QHBoxLayout, QLabel, QLineEdit, QMainWindow,
+    QPushButton, QSizePolicy, QStackedWidget, QTabWidget,
+    QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -60,8 +60,11 @@ class Ui_MainWindow(object):
 
         self.widget_4 = QWidget(self.widget)
         self.widget_4.setObjectName(u"widget_4")
-        sizePolicy.setHeightForWidth(self.widget_4.sizePolicy().hasHeightForWidth())
-        self.widget_4.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Ignored)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(3)
+        sizePolicy1.setHeightForWidth(self.widget_4.sizePolicy().hasHeightForWidth())
+        self.widget_4.setSizePolicy(sizePolicy1)
         self.horizontalLayout_3 = QHBoxLayout(self.widget_4)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.onglets = QTabWidget(self.widget_4)
@@ -75,11 +78,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.widget_6 = QWidget(self.choix_period)
         self.widget_6.setObjectName(u"widget_6")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
-        sizePolicy1.setHorizontalStretch(2)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.widget_6.sizePolicy().hasHeightForWidth())
-        self.widget_6.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
+        sizePolicy2.setHorizontalStretch(2)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.widget_6.sizePolicy().hasHeightForWidth())
+        self.widget_6.setSizePolicy(sizePolicy2)
         self.verticalLayout_2 = QVBoxLayout(self.widget_6)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.label_ticker = QLabel(self.widget_6)
@@ -104,11 +107,11 @@ class Ui_MainWindow(object):
 
         self.widget_7 = QWidget(self.choix_period)
         self.widget_7.setObjectName(u"widget_7")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
-        sizePolicy2.setHorizontalStretch(6)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.widget_7.sizePolicy().hasHeightForWidth())
-        self.widget_7.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
+        sizePolicy3.setHorizontalStretch(6)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.widget_7.sizePolicy().hasHeightForWidth())
+        self.widget_7.setSizePolicy(sizePolicy3)
         self.horizontalLayout_6 = QHBoxLayout(self.widget_7)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.verticalLayout_3 = QVBoxLayout()
@@ -153,8 +156,8 @@ class Ui_MainWindow(object):
 
         self.widget_8 = QWidget(self.choix_period)
         self.widget_8.setObjectName(u"widget_8")
-        sizePolicy1.setHeightForWidth(self.widget_8.sizePolicy().hasHeightForWidth())
-        self.widget_8.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.widget_8.sizePolicy().hasHeightForWidth())
+        self.widget_8.setSizePolicy(sizePolicy2)
         self.verticalLayout_5 = QVBoxLayout(self.widget_8)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.afficher_1 = QPushButton(self.widget_8)
@@ -177,11 +180,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
         self.widget_13 = QWidget(self.comparaison)
         self.widget_13.setObjectName(u"widget_13")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
-        sizePolicy3.setHorizontalStretch(4)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.widget_13.sizePolicy().hasHeightForWidth())
-        self.widget_13.setSizePolicy(sizePolicy3)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Preferred)
+        sizePolicy4.setHorizontalStretch(4)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.widget_13.sizePolicy().hasHeightForWidth())
+        self.widget_13.setSizePolicy(sizePolicy4)
         self.horizontalLayout_16 = QHBoxLayout(self.widget_13)
         self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
         self.verticalLayout_6 = QVBoxLayout()
@@ -221,8 +224,8 @@ class Ui_MainWindow(object):
 
         self.widget_14 = QWidget(self.comparaison)
         self.widget_14.setObjectName(u"widget_14")
-        sizePolicy2.setHeightForWidth(self.widget_14.sizePolicy().hasHeightForWidth())
-        self.widget_14.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.widget_14.sizePolicy().hasHeightForWidth())
+        self.widget_14.setSizePolicy(sizePolicy3)
         self.horizontalLayout_18 = QHBoxLayout(self.widget_14)
         self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
         self.verticalLayout_7 = QVBoxLayout()
@@ -266,8 +269,8 @@ class Ui_MainWindow(object):
 
         self.widget_15 = QWidget(self.comparaison)
         self.widget_15.setObjectName(u"widget_15")
-        sizePolicy1.setHeightForWidth(self.widget_15.sizePolicy().hasHeightForWidth())
-        self.widget_15.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.widget_15.sizePolicy().hasHeightForWidth())
+        self.widget_15.setSizePolicy(sizePolicy2)
         self.verticalLayout_8 = QVBoxLayout(self.widget_15)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.afficher_2 = QPushButton(self.widget_15)
@@ -299,11 +302,11 @@ class Ui_MainWindow(object):
 
         self.partie_graph = QWidget(self.widget)
         self.partie_graph.setObjectName(u"partie_graph")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(8)
-        sizePolicy4.setHeightForWidth(self.partie_graph.sizePolicy().hasHeightForWidth())
-        self.partie_graph.setSizePolicy(sizePolicy4)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(8)
+        sizePolicy5.setHeightForWidth(self.partie_graph.sizePolicy().hasHeightForWidth())
+        self.partie_graph.setSizePolicy(sizePolicy5)
         self.horizontalLayout_7 = QHBoxLayout(self.partie_graph)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.choix_graph = QStackedWidget(self.partie_graph)
@@ -363,11 +366,11 @@ class Ui_MainWindow(object):
 
         self.widget_3 = QWidget(self.widget)
         self.widget_3.setObjectName(u"widget_3")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(3)
-        sizePolicy5.setHeightForWidth(self.widget_3.sizePolicy().hasHeightForWidth())
-        self.widget_3.setSizePolicy(sizePolicy5)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Ignored)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(5)
+        sizePolicy6.setHeightForWidth(self.widget_3.sizePolicy().hasHeightForWidth())
+        self.widget_3.setSizePolicy(sizePolicy6)
         self.verticalLayout_4 = QVBoxLayout(self.widget_3)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.retours = QStackedWidget(self.widget_3)
@@ -504,87 +507,112 @@ class Ui_MainWindow(object):
         self.un_ticker.setObjectName(u"un_ticker")
         self.horizontalLayout_8 = QHBoxLayout(self.un_ticker)
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.widget_2 = QWidget(self.un_ticker)
+        self.one_ticker_choice = QTabWidget(self.un_ticker)
+        self.one_ticker_choice.setObjectName(u"one_ticker_choice")
+        self.tab_7 = QWidget()
+        self.tab_7.setObjectName(u"tab_7")
+        self.horizontalLayout_9 = QHBoxLayout(self.tab_7)
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.widget_2 = QWidget(self.tab_7)
         self.widget_2.setObjectName(u"widget_2")
-        self.verticalLayout_10 = QVBoxLayout(self.widget_2)
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.widget_9 = QWidget(self.widget_2)
-        self.widget_9.setObjectName(u"widget_9")
-        self.horizontalLayout_10 = QHBoxLayout(self.widget_9)
-        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.label_rendement = QLabel(self.widget_9)
+        self.verticalLayout_12 = QVBoxLayout(self.widget_2)
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.widget_25 = QWidget(self.widget_2)
+        self.widget_25.setObjectName(u"widget_25")
+        self.horizontalLayout_25 = QHBoxLayout(self.widget_25)
+        self.horizontalLayout_25.setObjectName(u"horizontalLayout_25")
+        self.label_rendement = QLabel(self.widget_25)
         self.label_rendement.setObjectName(u"label_rendement")
 
-        self.horizontalLayout_10.addWidget(self.label_rendement)
+        self.horizontalLayout_25.addWidget(self.label_rendement)
 
-        self.rendement = QLabel(self.widget_9)
+        self.rendement = QLabel(self.widget_25)
         self.rendement.setObjectName(u"rendement")
 
-        self.horizontalLayout_10.addWidget(self.rendement)
+        self.horizontalLayout_25.addWidget(self.rendement)
 
 
-        self.verticalLayout_10.addWidget(self.widget_9)
+        self.verticalLayout_12.addWidget(self.widget_25)
 
-        self.widget_10 = QWidget(self.widget_2)
-        self.widget_10.setObjectName(u"widget_10")
-        self.horizontalLayout_9 = QHBoxLayout(self.widget_10)
-        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.label_vol = QLabel(self.widget_10)
+        self.widget_26 = QWidget(self.widget_2)
+        self.widget_26.setObjectName(u"widget_26")
+        self.horizontalLayout_26 = QHBoxLayout(self.widget_26)
+        self.horizontalLayout_26.setObjectName(u"horizontalLayout_26")
+        self.label_vol = QLabel(self.widget_26)
         self.label_vol.setObjectName(u"label_vol")
 
-        self.horizontalLayout_9.addWidget(self.label_vol)
+        self.horizontalLayout_26.addWidget(self.label_vol)
 
-        self.vol = QLabel(self.widget_10)
+        self.vol = QLabel(self.widget_26)
         self.vol.setObjectName(u"vol")
 
-        self.horizontalLayout_9.addWidget(self.vol)
+        self.horizontalLayout_26.addWidget(self.vol)
 
 
-        self.verticalLayout_10.addWidget(self.widget_10)
+        self.verticalLayout_12.addWidget(self.widget_26)
 
 
-        self.horizontalLayout_8.addWidget(self.widget_2)
+        self.horizontalLayout_9.addWidget(self.widget_2)
 
-        self.widget_5 = QWidget(self.un_ticker)
+        self.widget_5 = QWidget(self.tab_7)
         self.widget_5.setObjectName(u"widget_5")
-        self.verticalLayout_9 = QVBoxLayout(self.widget_5)
-        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
-        self.widget_12 = QWidget(self.widget_5)
-        self.widget_12.setObjectName(u"widget_12")
-        self.horizontalLayout_26 = QHBoxLayout(self.widget_12)
-        self.horizontalLayout_26.setObjectName(u"horizontalLayout_26")
-        self.label_per = QLabel(self.widget_12)
+        self.verticalLayout_13 = QVBoxLayout(self.widget_5)
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.widget_27 = QWidget(self.widget_5)
+        self.widget_27.setObjectName(u"widget_27")
+        self.horizontalLayout_31 = QHBoxLayout(self.widget_27)
+        self.horizontalLayout_31.setObjectName(u"horizontalLayout_31")
+        self.label_per = QLabel(self.widget_27)
         self.label_per.setObjectName(u"label_per")
 
-        self.horizontalLayout_26.addWidget(self.label_per)
+        self.horizontalLayout_31.addWidget(self.label_per)
 
-        self.per = QLabel(self.widget_12)
+        self.per = QLabel(self.widget_27)
         self.per.setObjectName(u"per")
 
-        self.horizontalLayout_26.addWidget(self.per)
+        self.horizontalLayout_31.addWidget(self.per)
 
 
-        self.verticalLayout_9.addWidget(self.widget_12)
+        self.verticalLayout_13.addWidget(self.widget_27)
 
-        self.widget_11 = QWidget(self.widget_5)
-        self.widget_11.setObjectName(u"widget_11")
-        self.horizontalLayout_25 = QHBoxLayout(self.widget_11)
-        self.horizontalLayout_25.setObjectName(u"horizontalLayout_25")
-        self.label_beta = QLabel(self.widget_11)
+        self.widget_28 = QWidget(self.widget_5)
+        self.widget_28.setObjectName(u"widget_28")
+        self.horizontalLayout_32 = QHBoxLayout(self.widget_28)
+        self.horizontalLayout_32.setObjectName(u"horizontalLayout_32")
+        self.label_beta = QLabel(self.widget_28)
         self.label_beta.setObjectName(u"label_beta")
 
-        self.horizontalLayout_25.addWidget(self.label_beta)
+        self.horizontalLayout_32.addWidget(self.label_beta)
 
-        self.beta = QLabel(self.widget_11)
+        self.beta = QLabel(self.widget_28)
         self.beta.setObjectName(u"beta")
 
-        self.horizontalLayout_25.addWidget(self.beta)
+        self.horizontalLayout_32.addWidget(self.beta)
 
 
-        self.verticalLayout_9.addWidget(self.widget_11)
+        self.verticalLayout_13.addWidget(self.widget_28)
 
 
-        self.horizontalLayout_8.addWidget(self.widget_5)
+        self.horizontalLayout_9.addWidget(self.widget_5)
+
+        self.one_ticker_choice.addTab(self.tab_7, "")
+        self.tab_8 = QWidget()
+        self.tab_8.setObjectName(u"tab_8")
+        self.verticalLayout_9 = QVBoxLayout(self.tab_8)
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.finviz_selector = QComboBox(self.tab_8)
+        self.finviz_selector.setObjectName(u"finviz_selector")
+
+        self.verticalLayout_9.addWidget(self.finviz_selector)
+
+        self.finviz_info = QLabel(self.tab_8)
+        self.finviz_info.setObjectName(u"finviz_info")
+
+        self.verticalLayout_9.addWidget(self.finviz_info)
+
+        self.one_ticker_choice.addTab(self.tab_8, "")
+
+        self.horizontalLayout_8.addWidget(self.one_ticker_choice)
 
         self.retours.addWidget(self.un_ticker)
 
@@ -604,6 +632,7 @@ class Ui_MainWindow(object):
         self.choix_graph.setCurrentIndex(0)
         self.choix_graph_deux_tickers.setCurrentIndex(0)
         self.retours.setCurrentIndex(1)
+        self.one_ticker_choice.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -629,7 +658,7 @@ class Ui_MainWindow(object):
         self.afficher_2.setText(QCoreApplication.translate("MainWindow", u"Afficher CSV", None))
         self.bouton_confirm_comparaison.setText(QCoreApplication.translate("MainWindow", u"Confirmer", None))
         self.onglets.setTabText(self.onglets.indexOf(self.comparaison), QCoreApplication.translate("MainWindow", u"Comparaison entre deux tickers", None))
-        self.choix_graph_deux_tickers.setTabText(self.choix_graph_deux_tickers.indexOf(self.evo), QCoreApplication.translate("MainWindow", u"Evolutions des cours", None))
+        self.choix_graph_deux_tickers.setTabText(self.choix_graph_deux_tickers.indexOf(self.evo), QCoreApplication.translate("MainWindow", u"Evolution des cours", None))
         self.choix_graph_deux_tickers.setTabText(self.choix_graph_deux_tickers.indexOf(self.ratio), QCoreApplication.translate("MainWindow", u"Ratio entre les deux cours", None))
         self.label_r_a.setText("")
         self.r_a.setText("")
@@ -651,5 +680,8 @@ class Ui_MainWindow(object):
         self.per.setText("")
         self.label_beta.setText("")
         self.beta.setText("")
+        self.one_ticker_choice.setTabText(self.one_ticker_choice.indexOf(self.tab_7), QCoreApplication.translate("MainWindow", u"Informations li\u00e9es aux donn\u00e9es", None))
+        self.finviz_info.setText("")
+        self.one_ticker_choice.setTabText(self.one_ticker_choice.indexOf(self.tab_8), QCoreApplication.translate("MainWindow", u"Informations obtenues sur Finviz", None))
     # retranslateUi
 
