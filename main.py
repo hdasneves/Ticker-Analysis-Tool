@@ -1,18 +1,19 @@
 from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PySide6 import QtCharts
 from PySide6.QtCore import Qt, QDateTime
-import class_ticker
-import fun
+from thread_import import DataFetchWorker
 import sys
 from yahoo import Ui_MainWindow
 from sauv import afficheur
+
+finviz_ind = ["ROE", "Profit Margin", "Beta", "Market Cap", "P/E"]
 
 class analyse(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(analyse, self).__init__()
         self.setupUi(self)
         self.setWindowTitle("Interface principale")
-        self.finviz_selector.addItems(class_ticker.finviz_ind)
+        self.finviz_selector.addItems(finviz_ind)
         self.finviz_selector.setEnabled(False)
 
         self.bouton_confirm.clicked.connect(self.confirmation_ticker)
@@ -35,7 +36,7 @@ class analyse(QMainWindow, Ui_MainWindow):
             self.retours.setCurrentIndex(0)
 
     def change_selector_finviz(self, index):
-        self.finviz_info.setText(self.finviz_data[class_ticker.finviz_ind[index]])
+        self.finviz_info.setText(self.finviz_data[finviz_ind[index]])
 
     
     def afficher_one_ticker(self):
@@ -51,72 +52,76 @@ class analyse(QMainWindow, Ui_MainWindow):
         if len(self.save_tickers) == 0:
             QMessageBox.critical(self, "Erreur", "Cliquez sur confirmer avant d'afficher le CSV !")
             return
-        
+        print(self.save_tickers["data_1"])
+        print(self.save_tickers["data_2"])
         self.window_classeur = afficheur(text_1 = self.actif_a.text(), data_1 = self.save_tickers["data_1"], text_2 = self.actif_b.text(), data_2 = self.save_tickers["data_2"])
         self.window_classeur.show()
 
     def confirmation_ticker(self):
-        infos = class_ticker.Ticker(self.ticker.text(), self.depart.text(), self.fin.text()) 
-
-        if infos.data is None : 
-            QMessageBox.critical(self, "Erreur", "Ticker inexistant ou dates incorrectes !")
-            return
         
-        self.save_ticker = {"data_1" : infos.data}
-        self.finviz_data = infos.finviz_data
-        self.finviz_info.setText(self.finviz_data[class_ticker.finviz_ind[0]]) 
+        self.data = DataFetchWorker(self.ticker.text(), self.depart.text(), self.fin.text())
+        self.data.finished.connect(self.data_secured_one_ticker)
+        self.data.error.connect(self.data_error)
+        self.data.start()
+    
+    def data_secured_one_ticker(self, result):
+        self.save_ticker = {"data_1" : result["data_1"]}
+        self.finviz_data = result["finviz_data"]
+        self.finviz_info.setText(self.finviz_data[finviz_ind[0]]) 
         self.finviz_selector.setEnabled(True)
         
-        self.linegraph(self.graph_ticker, self.ticker.text(), data_1 = infos.data["data"])
+        self.linegraph(self.graph_ticker, self.ticker.text(), data_1 = result["data_1"]["data"])
         self.label_rendement.setText("Rendement")
-        self.rendement.setText(str(infos.data["rendement"])+"%")
+        self.rendement.setText(str(result["data_1"]["rendement"])+"%")
         self.label_vol.setText("Volatilité annualisée (en %)")
-        self.vol.setText(str(infos.data["volatilite"])+"%")
+        self.vol.setText(str(result["data_1"]["volatilite"])+"%")
 
         self.label_per.setText("PER actuel (hors période choisie)")
-        if infos.data["per"] is not None : 
-            self.per.setText(str(round(infos.data["per"], 2)))
+        if result["data_1"]["per"] is not None : 
+            self.per.setText(str(round(result["data_1"]["per"], 2)))
         else : 
             self.per.setText("Données indisponibles !")
 
         self.label_beta.setText("Beta actuel (hors période choisie)")
-        if infos.data["beta"] is not None : 
-            self.beta.setText(str(round(infos.data["beta"], 2)))
+        if result["data_1"]["beta"] is not None : 
+            self.beta.setText(str(round(result["data_1"]["beta"], 2)))
         else : 
             self.beta.setText("Données indisponibles !")
 
     def confirmation_comparaison(self):
-        actif_a = class_ticker.Ticker(self.actif_a.text(), self.depart_comparaison.text(), self.fin_comparaison.text()) 
-        actif_b = class_ticker.Ticker(self.actif_b.text(), self.depart_comparaison.text(), self.fin_comparaison.text()) 
+        self.datas = DataFetchWorker(self.actif_a.text(), self.depart_comparaison.text(), self.fin_comparaison.text(), self.actif_b.text(), nb_ticker = 2)
+        self.datas.finished.connect(self.data_two_obtained)
+        self.datas.error.connect(self.data_error)
+        self.datas.start()
 
-        if actif_a.data is None or actif_b.data is None : 
-            QMessageBox.critical(self, "Erreur", "Ticker inexistant ou dates incorrectes !")
-            return
-        
-        self.save_tickers = {"data_1" : actif_a.data , "data_2" : actif_b.data }
+    def data_two_obtained(self, result):
+        self.save_tickers = {"data_1" : result["data_1"]["data"] , "data_2" : result["data_2"]["data"]}
+        actif_a = result["data_1"]
+        actif_b = result["data_2"]
 
-        ratio_data = fun.get_ratio(text_1 = self.actif_a.text(), data_1 = actif_a.data["data"], text_2 = self.actif_b.text(), data_2 = actif_b.data["data"])
+        ratio_data = result["ratio"]
 
-        self.linegraph(self.graph_evo_tickers, self.actif_a.text(), actif_a.data["data"], self.actif_b.text(), actif_b.data["data"])
+        self.linegraph(self.graph_evo_tickers, self.actif_a.text(), actif_a["data"], self.actif_b.text(), actif_b["data"])
         self.linegraph(self.graph_ratio_ticker, self.actif_a.text(), ratio_data, ratio = True, text_2 = self.actif_b.text())
 
 
         self.label_r_a.setText(f"Rendement de {self.actif_a.text()}")
-        self.r_a.setText(str(actif_a.data["rendement"])+"%")
+        self.r_a.setText(str(actif_a["rendement"])+"%")
         self.label_r_b.setText(f"Rendement de {self.actif_b.text()}")
-        self.r_b.setText(str(actif_b.data["rendement"])+"%")
+        self.r_b.setText(str(actif_b["rendement"])+"%")
 
         self.label_v_a.setText(f"Volatilité de {self.actif_a.text()} (en %)")
-        self.v_a.setText(str(actif_a.data["volatilite"])+"%")
+        self.v_a.setText(str(actif_a["volatilite"])+"%")
         self.label_v_b.setText(f"Volatilité de {self.actif_b.text()} (en %)")
-        self.v_b.setText(str(actif_b.data["volatilite"])+"%")
+        self.v_b.setText(str(actif_b["volatilite"])+"%")
 
         self.label_diff_r.setText(f"Spread Return")
-        self.r_diff.setText(str(round(actif_a.data["rendement"] - actif_b.data["rendement"]))+"%")
+        self.r_diff.setText(str(round(actif_a["rendement"] - actif_b["rendement"]))+"%")
         self.label_diff_v.setText(f"Spread Volatility")
-        self.v_diff.setText(str(round(actif_a.data["volatilite"] - actif_b.data["volatilite"], 2))+"%")
+        self.v_diff.setText(str(round(actif_a["volatilite"] - actif_b["volatilite"], 2))+"%")
 
     def linegraph(self, graphique, text_1, data_1, text_2 = None, data_2 = None, ratio = None) :
+ 
         chart = QtCharts.QChart()
         if data_2 is not None:
             chart.setTitle(f"Comparaison de l'évolution du cours de {text_1} et de {text_2} entre le {self.depart_comparaison.text()} et le {self.fin_comparaison.text()} en base log")
@@ -184,6 +189,9 @@ class analyse(QMainWindow, Ui_MainWindow):
             series_data_2.attachAxis(axis_z)
 
         graphique.setChart(chart)
+
+    def data_error(self, result):
+        QMessageBox.critical(self, "Erreur", result)
     
 
 if __name__ == "__main__":

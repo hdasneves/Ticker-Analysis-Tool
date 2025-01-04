@@ -11,7 +11,7 @@ class afficheur(QMainWindow, Ui_MainWindow):
         self.setWindowTitle("Editeur de données")
 
         if data_2 is not None :
-            overall_data = pd.merge(left = data_1["data"], right = data_2["data"], on = "Date", suffixes = (f"_{text_1}", f"_{text_2}"))
+            overall_data = pd.merge(left = data_1, right = data_2, on = "Date", suffixes = (f"_{text_1}", f"_{text_2}"))
         else :
             overall_data = data_1["data"]
 
